@@ -160,6 +160,30 @@ async def on_member_remove(member):
                 embed.set_footer(text="∑」FOR#1234", icon_url="https://cdn.discordapp.com/avatars/726974969661358140/4bd1945a3f76966b884077d9399fd560.png?size=256")
                 await message.channel.send(embed=embed)
                 
+     if message.content == '/서버정보':
+        rnrrk = message.guild.region
+        print(message.guild.region)
+        embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at, title=f"{message.guild.name}")
+        embed.set_thumbnail(url=message.guild.icon_url)
+        embed.add_field(name="서버 이름", value=message.guild.name, inline=False)
+        embed.add_field(name="서버 ID", value=message.guild.id, inline=False)
+        embed.add_field(name="서버 국가", value=rnrrk, inline=False)
+        embed.add_field(name="서버 Owner", value=f'<@{message.guild.owner.id}>', inline=False)
+        embed.add_field(name="서버 Owner ID", value=message.guild.owner.id, inline=False)
+        embed.add_field(name="서버 멤버 수", value=f'{len(message.guild.members)}명 (봇 : {len(list(filter(lambda x: x.bot, message.guild.members)))}명 | 유저 : {len(list(filter(lambda x: not x.bot, message.guild.members)))}명)', inline=False)
+        embed.add_field(name="서버 채널 수", value=f'전체 채널: {len(message.guild.channels)}개 (채팅채널 : {len(message.guild.text_channels)}개 | 음성채널 : {len(message.guild.voice_channels)}개 | 카테고리 : {len(message.guild.categories)}개)', inline=False)
+        embed.add_field(name="서버 부스트 레벨", value=f'{message.guild.premium_tier}레벨', inline=False)
+        embed.add_field(name="서버 부스트 횟수", value=f'{message.guild.premium_subscription_count}번', inline=False)
+        if message.guild.afk_channel != None:
+            embed.add_field(name = f'잠수 채널', value = f'<#{message.guild.afk_channel.id}> \n ( 시간 제한 : {message.guild.afk_timeout} 초 )', inline = False)
+        else:
+            embed.add_field(name="잠수 채널", value="잠수 채널이 없습니다.")
+        if message.guild.system_channel != None:
+            embed.add_field(name = f'시스템 채널', value = f'<#{message.guild.system_channel.id}>', inline = False)
+        else:
+            embed.add_field(name="잠수 채널", value="시스템 채널이 없습니다.")
+        embed.set_footer(text=f"{message.author}, 인증됨 | 준홍봇의 코드를 참고했어요!", icon_url=message.author.avatar_url)
+        await message.channel.send(embed=embed)
    
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
