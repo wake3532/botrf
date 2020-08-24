@@ -5,7 +5,7 @@ import asyncio
 import random
 import urllib
 from urllib.request import Request
-from urllib import par
+from urllib import parse
 
 
 client = discord.Client()
