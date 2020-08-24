@@ -67,7 +67,7 @@ async def on_member_remove(member):
                 await m.edit(content="서포트 서버에 피드백이 발송되었어요!", embed=Dansdml)
                 await client.get_channel(int(737624237925466154)).send(embed=Dansdml)
 
-    if message.content == '?help':
+     if message.content == '?':
                 embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at)
                 embed.add_field(name="보내는중", value=":yes: 잠시 기다려 주세요", inline=True)
                 embed.set_footer(text=f"{message.author}, 인증됨", icon_url=message.author.avatar_url)
