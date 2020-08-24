@@ -39,34 +39,6 @@ async def on_member_remove(member):
     except:
         pass
 
-    if message.content.startswith("?피드백"):
-        Dansdml1 = message.content[5:]
-        Dansdml = discord.Embed(title="**[ JELLO BOT ]**", color=0x6777ff)
-        Dansdml.add_field(name="• 문의하는 내용", value=f"{Dansdml1}\n\n• 문의하는 서버 : {message.guild.name}\n• 문의한 이용자 : {message.author.mention}", inline=False)
-        Dansdml.set_thumbnail(url="https://cdn.discordapp.com/avatars/726974969661358140/4bd1945a3f76966b884077d9399fd560.png?size=256")
-        Dansdml.set_footer(text=message.author.name + " | 이 내용이 전해집니다 스팸 메세지는 봇 제한이 될 수 있습니다. !", icon_url=message.author.avatar_url)
-        m = await message.channel.send("문의발송 여부를 선택하여주세요.", embed=Dansdml)
-        await m.add_reaction('✅')
-        await m.add_reaction('❎')
-        try:
-            reaction, user = await client.wait_for('reaction_add', timeout = 5, check = lambda reaction, user: user == message.author and str(reaction.emoji) in ['✅', '❎'])
-        except asyncio.TimeoutError:
-            Drhdwltlrks = discord.Embed(title="**[ ERROR ]**", color=0xff0000)
-            Drhdwltlrks.add_field(name="**문의**", value=f"{message.author.mention} **님 다른 사람이랑 대화 또는 너무 길게 피드백을 작성을 인식했어요 다시 시도 하십시오.**", inline=False)
-            Drhdwltlrks.set_thumbnail(url=message.author.avatar_url)
-            Drhdwltlrks.set_footer(text="∑」FOR#1234  | 피드백 코드의 원본은 djs226587#1243 님의 코드에요 !" , icon_url="https://cdn.discordapp.com/avatars/726974969661358140/4bd1945a3f76966b884077d9399fd560.png?size=256")
-            await m.edit(content="문의발송이 취소되었습니다.", embed=Drhdwltlrks)
-        else:
-            if str(reaction.emoji) == "❎":
-                Drhdwlcnlth = discord.Embed(title="**[ JELLO BOT ]**", color=0xff0000)
-                Drhdwlcnlth.add_field(name="**문의**", value=f"{message.author.mention} **님 문의발송이 취소되었습니다.**", inline=False)
-                Drhdwlcnlth.set_thumbnail(url=message.author.avatar_url)
-                Drhdwlcnlth.set_footer(text="∑」FOR#1234 | 문의 발송이 취소되었습니다!" , icon_url="https://cdn.discordapp.com/avatars/726974969661358140/4bd1945a3f76966b884077d9399fd560.png?size=256")
-                await m.edit(embed=Drhdwlcnlth)
-            elif str(reaction.emoji) == "✅":
-                await m.edit(content="서포트 서버에 피드백이 발송되었어요!", embed=Dansdml)
-                await client.get_channel(int(737624237925466154)).send(embed=Dansdml)
-
                 
     if message.content.startswith("?dm"):
         userdm = message.content[4:].split(",")
