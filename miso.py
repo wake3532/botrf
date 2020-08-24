@@ -77,7 +77,7 @@ async def on_member_remove(member):
                 embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at)
                 embed.add_field(name=":wave: 안녕하세요! 명령어들 앞에는 JELLO PRO 라는 칭호가 붙어요! 지금부터 도움말 들어옵니다!", value="도움말 시작!", inline=True)
                 embed.add_field(name="도움말 1", value="?킥 ?dm ?피드백 ?청소", inline=True)
-                embed.add_field(name="도움말 2", value="아직 준비중이에요"", inline=True)
+                embed.add_field(name="도움말 2", value="준비중!", inline=True)
                 await message.channel.send(embed=embed)
 
                 
