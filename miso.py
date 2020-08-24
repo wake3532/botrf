@@ -161,5 +161,5 @@ async def on_member_remove(member):
                 await message.channel.send(embed=embed)
 
 
-
-client.run('NzI2OTc0OTY5NjYxMzU4MTQw.XvlGMw.0M-nCRAbJR0tf47RpXAX0B-aIXg')
+access_token = os.environ["BOT_TOKEN"]
+client.run(access_token)
