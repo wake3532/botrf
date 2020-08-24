@@ -160,7 +160,7 @@ async def on_member_remove(member):
                 embed.set_footer(text="∑」FOR#1234", icon_url="https://cdn.discordapp.com/avatars/726974969661358140/4bd1945a3f76966b884077d9399fd560.png?size=256")
                 await message.channel.send(embed=embed)
                 
-     if message.content == '?서버정보':
+   if message.content == '?서버정보':
         rnrrk = message.guild.region
         print(message.guild.region)
         embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at, title=f"{message.guild.name}")
