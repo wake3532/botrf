@@ -10,7 +10,7 @@ from urllib import par
 
 client = discord.Client()
 
-owner ['724769557759393837']
+owner = ['724769557759393837']
 @client.event
 async def on_ready():
     print('봇이 로그인 하였습니다.')
