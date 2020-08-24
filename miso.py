@@ -159,8 +159,40 @@ async def on_member_remove(member):
     )
                 embed.set_footer(text="∑」FOR#1234", icon_url="https://cdn.discordapp.com/avatars/726974969661358140/4bd1945a3f76966b884077d9399fd560.png?size=256")
                 await message.channel.send(embed=embed)
+
+    if (message.content.split(" ")[0] == "?킥"):
+        if (message.author.guild_permissions.kick_members):
+            try:
+                user = message.guild.get_member(int(message.content.split(' ')[1][2:20]))
+                reason = message.content[22:]
+                if (len(message.content.split(" ")) == 2):
+                    reason = "None"
+                await user.send(embed=discord.Embed(title="💥 서버 추방", description=f'당신은 **{message.guild.name}** 서버에서 추방되었습니다. 사유는 다음과 같습니다. ```{reason}```', color=0xff0000))
+                await user.kick(reason=reason)
+                await message.channel.send(embed=discord.Embed(title="Kick Success", description=f"{message.author.mention} 님, 성공적으로 추방시켰습니다. 사유:```{reason}```", color=0x00ff00))
+            except Exception as e:
+                await message.channel.send(embed=discord.Embed(title="❌ 에러 발생", description=str(e), color=0xff0000))
+                return
+        else:
+            await message.channel.send(embed=discord.Embed(title="⚠ 권한 부족", description=message.author.mention + "님은 유저를 추방할 수 있는 권한이 없습니다.", color=0xff0000))
+            return
                 
-   if message.content == '?서버정보':
+    if message.content == "?help" or message.content == '?명령어':
+        embed = discord.Embed(title="🎪ㅣJELLO 기본 명령어", timestamp=message.created_at, 
+        colour=discord.Colour.dark_blue()    
+    )
+        embed.add_field(name="?명령어", value="명령어를 보여드려요!", inline=False)
+        embed.add_field(name="?핑", value="퐁!", inline=False)
+        embed.add_field(name="?청소 (수)", value="수 만큼 청소합니다.!", inline=False)
+        embed.add_field(name="?서버정보", value="서버 정보를 보여드립니다!", inline=False)
+        embed.add_field(name="?피드백 [ 내용 ]", value="피드백을 보내요!", inline=False)
+        embed.add_field(name="?킥", value="서버에서 킥 합니다!", inline=False)
+        embed.add_field(name="?다양한 말들", value="말에 답을 해드려요 하지만 거의 말을 못 할겁니다!", inline=False)
+        embed.add_field(name="?공지", value="공지 메세지를 보내드려요! ㅣ 아 잠깐! 이 명령어는 관리 권환이 필요해요", inline=False)
+        embed.set_footer(text="개발자는 ∑」FOR#1234 이에요!")
+        await message.channel.send(embed=embed)
+        
+    if message.content == '?서버정보':
         rnrrk = message.guild.region
         print(message.guild.region)
         embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at, title=f"{message.guild.name}")
