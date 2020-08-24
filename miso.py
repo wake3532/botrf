@@ -21,13 +21,6 @@ async def on_ready():
     print(' ')
     print('닉네임 : {}'.format(client.user.name))
     print('아이디 : {}'.format(client.user.id))
-    while True:
-        user = len(client.users)
-        server = len(client.guilds)
-        messages = ["안녕하세요", "봇 건의는 ∑」FOR#1234"" , "이 봇은  TEAM MB에서 만들어 졌습니다." , str(user) + "명이 JELLO를 사용중입니다.", str(server) + "명이 프리미엄을 사용중입니다"]
-        for (m) in range(5):
-            await client.change_presence(status=discord.Status.online, activity=discord.Activity(name=messages[(m)], type=discord.ActivityType.watching))
-            await asyncio.sleep(4)
 
 @client.event
 async def on_message(message):
