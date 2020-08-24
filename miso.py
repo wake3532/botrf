@@ -5,7 +5,6 @@ import asyncio
 import random
 import urllib
 from urllib.request import Request
-import bs4
 from bs4 import BeautifulSoup
 from urllib import parse
 from captcha.image import ImageCaptcha
