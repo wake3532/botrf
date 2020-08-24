@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import os
 import asyncio
+import bs4
 import random
 import urllib
 from urllib.request import Request
