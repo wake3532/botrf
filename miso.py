@@ -50,6 +50,8 @@ async def on_member_remove(member):
     except:
         pass
 
+@client.event
+async def on_message(message)
     if message.content.startswith("*핑"):
         la = client.latency
         embed = discord.Embed(title="퐁!")
