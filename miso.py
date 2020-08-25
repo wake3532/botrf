@@ -94,6 +94,9 @@ async def on_message(message):
             await message.channel.send(embed=discord.Embed(title="⚠ 권한 부족", description=message.author.mention + "님은 유저를 차단할 수 있는 권한이 없습니다.", color=0xff0000))
             return
 
+            
+
+
 
     if message.content == '*서버정보':
         rnrrk = message.guild.region
