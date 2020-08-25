@@ -181,12 +181,12 @@ async def on_message(message):
                 embed.set_footer(text=f"{message.author}, 인증됨", icon_url=message.author.avatar_url)
                 await message.channel.send(embed=embed)
                 time.sleep(3)
-                await message.delete()
-                embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at)
-                embed.add_field(name=":wave: 안녕하세요! 명령어들 앞에는 JELLO PRO 라는 칭호가 붙어요! 지금부터 도움말 들어옵니다!", value="도움말 시작!", inline=True)
-                embed.add_field(name="도움말 1", value="*킥 *밴 *청소 *실검 *계산 *서버정보 *정보 *핑", inline=True)
-                embed.add_field(name="도움말 2", value="준비중이에요!", inline=True)
-                await message.channel.send(embed=embed)
+                await embed.delete()
+                embed2=discord.Embed(colour=0x85CFFF, timestamp=message.created_at)
+                embed2.add_field(name=":wave: 안녕하세요! 명령어들 앞에는 JELLO PRO 라는 칭호가 붙어요! 지금부터 도움말 들어옵니다!", value="도움말 시작!", inline=True)
+                embed2.add_field(name="도움말 1", value="*킥 *밴 *청소 *실검 *계산 *서버정보 *정보 *핑", inline=True)
+                embed2.add_field(name="도움말 2", value="준비중이에요!", inline=True)
+                await message.channel.send(embed=embed2)
 
 
     if (message.content.split(" ")[0] == "*킥"):
