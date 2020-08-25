@@ -213,5 +213,5 @@ async def on_member_remove(member):
             result = result + (str(i+1))+"위 | "+e.text+"\n"
         await message.channel.send(result)
         
-access_token = os.envi
+access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
