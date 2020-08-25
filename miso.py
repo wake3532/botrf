@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from urllib.request import Request
 from urllib import parse
 import bs4
+import time
 
 
 client = discord.Client()
