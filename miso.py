@@ -212,5 +212,6 @@ async def on_member_remove(member):
         for i, e in enumerate(tags):
             result = result + (str(i+1))+"위 | "+e.text+"\n"
         await message.channel.send(result)
-
-client.run('NzI2OTc0OTY5NjYxMzU4MTQw.XvlGMw.3taBZxzHqmSjGwU65OdIQmeKzzg')
+        
+access_token = os.envi
+client.run(access_token)
