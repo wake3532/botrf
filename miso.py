@@ -53,14 +53,14 @@ async def on_member_remove(member):
 
 @client.event
 async def on_message(message):
-    if message.content.startswith("*핑"):
+    if message.content.startswith("젤로야 핑"):
         la = client.latency
         embed = discord.Embed(title="퐁!")
         embed.add_field(name="반응 속도", value=str(round(la * 1000)) + "ms")
-        embed.set_footer(text=message.author.name + " | Sky BOT#2208  스카이봇은 2명이 개발하고 있어요!", icon_url=message.author.avatar_url)
+        embed.set_footer(text=message.author.name + " | 와 좋고 좋았어요 ! ", icon_url=message.author.avatar_url)
         await message.channel.send(embed=embed)
 
-    if message.content.startswith('*정보'):
+    if message.content.startswith('젤로야 정보'):
         print(f'{message.guild.name}/{message.author} ('+ f'{message.author.id}) : {message.content}')
         user = message.guild.get_member(int(message.content.split(' ')[1][3:21]))
         roles=[role for role in user.roles]
@@ -77,7 +77,7 @@ async def on_message(message):
         embed.add_field(name ="상태", value =user.status, inline = False)
         await message.channel.send(embed=embed)
 
-    if (message.content.split(" ")[0] == "*밴"):
+    if (message.content.split(" ")[0] == "젤로야 밴"):
         if (message.author.guild_permissions.ban_members):
             try:
                 user = message.guild.get_member(int(message.content.split(' ')[1][3:21]))
@@ -98,7 +98,7 @@ async def on_message(message):
 
 
 
-    if message.content == '*서버정보':
+    if message.content == '젤로야 서버정보':
         rnrrk = message.guild.region
         print(message.guild.region)
         embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at, title=f"{message.guild.name}")
@@ -123,7 +123,7 @@ async def on_message(message):
         embed.set_footer(text=f"{message.author}, 인증됨 | 준홍봇의 코드를 참고했어요!", icon_url=message.author.avatar_url)
         await message.channel.send(embed=embed)
 
-    if message.content.startswith("*계산"):
+    if message.content.startswith("젤로야 계산"):
         global calcResult
         param = message.content.split()
         try:
@@ -178,7 +178,7 @@ async def on_message(message):
             await message.channel.send("You can't divide with 0.")
 
 
-    if message.content == '*명령어':
+    if message.content == '젤로야 명령어':
                 embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at)
                 embed.add_field(name="보내는중..", value=":yes: 잠시 기다려 주세요", inline=True)
                 embed.set_footer(text=f"{message.author}, 인증됨", icon_url=message.author.avatar_url)
@@ -186,13 +186,13 @@ async def on_message(message):
                 time.sleep(3)
                 await message.delete()
                 embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at)
-                embed.add_field(name=":wave: 안녕하세요! 명령어들 앞에는 JELLO PRO 라는 칭호가 붙어요! 지금부터 도움말 들어옵니다!", value="도움말 시작!", inline=True)
-                embed.add_field(name="도움말 1", value="*킥 *밴 *청소 *실검 *계산 *서버정보 *정보 *핑", inline=True)
+                embed.add_field(name=":wave: 안녕하세요! 아 참고로 그거 아시죠? 접두사는 젤로야 입니다 ! ", value="도움말 시작!", inline=True)
+                embed.add_field(name="도움말 1", value="킥 밴 청소 실검 계산 서버정보 정보 핑", inline=True)
                 embed.add_field(name="도움말 2", value="준비중이에요!", inline=True)
                 await message.channel.send(embed=embed)
 
 
-    if (message.content.split(" ")[0] == "*킥"):
+    if (message.content.split(" ")[0] == "젤로야 킥"):
         if (message.author.guild_permissions.kick_members):
             try:
                 user = message.guild.get_member(int(message.content.split(' ')[1][2:20]))
@@ -208,8 +208,37 @@ async def on_message(message):
         else:
             await message.channel.send(embed=discord.Embed(title="⚠ 권한 부족", description=message.author.mention + "님은 유저를 추방할 수 있는 권한이 없습니다.", color=0xff0000))
             return 
+        
+    if message.content.startswith("젤로야 피드백"):
+        Dansdml1 = message.content[5:]
+        Dansdml = discord.Embed(title="**< Space BOT >**", color=0x6777ff)
+        Dansdml.add_field(name="• 문의하는 내용", value=f"{Dansdml1}\n\n• 문의하는 서버 : {message.guild.name}\n• 문의한 이용자 : {message.author.mention}", inline=False)
+        Dansdml.set_thumbnail(url="https://cdn.discordapp.com/attachments/736382917072257107/736383011125461072/skybot.png")
+        Dansdml.set_footer(text=message.author.name + " | 피드백 코드의 원본은 djs226587#1243 님의 코드에요 !", icon_url=message.author.avatar_url)
+        m = await message.channel.send("문의발송 여부를 선택하여주세요.", embed=Dansdml)
+        await m.add_reaction('✅')
+        await m.add_reaction('❎')
+        try:
+            reaction, user = await client.wait_for('reaction_add', timeout = 5, check = lambda reaction, user: user == message.author and str(reaction.emoji) in ['✅', '❎'])
+        except asyncio.TimeoutError:
+            Drhdwltlrks = discord.Embed(title="**< Space BOT >**", color=0xff0000)
+            Drhdwltlrks.add_field(name="**문의**", value=f"{message.author.mention} **님 문의발송 선택 시간초과입니다.**", inline=False)
+            Drhdwltlrks.set_thumbnail(url=message.author.avatar_url)
+            Drhdwltlrks.set_footer(text="Sky BOT#2204 | 피드백 코드의 원본은 djs226587#1243 님의 코드에요 !" , icon_url="https://cdn.discordapp.com/attachments/736382917072257107/736383011125461072/skybot.png")
+            await m.edit(content="문의발송이 취소되었습니다.", embed=Drhdwltlrks)
+        else:
+            if str(reaction.emoji) == "❎":
+                Drhdwlcnlth = discord.Embed(title="**< Space BOT >**", color=0xff0000)
+                Drhdwlcnlth.add_field(name="**문의**", value=f"{message.author.mention} **님 문의발송이 취소되었습니다.**", inline=False)
+                Drhdwlcnlth.set_thumbnail(url=message.author.avatar_url)
+                Drhdwlcnlth.set_footer(text="Sky BOT#2204 | 피드백 코드의 원본은 djs226587#1243 님의 코드에요 !" , icon_url="https://cdn.discordapp.com/attachments/736382917072257107/736383011125461072/skybot.png")
+                await m.edit(embed=Drhdwlcnlth)
+            elif str(reaction.emoji) == "✅":
+                await m.edit(content="서포트 서버에 피드백이 발송되었어요!", embed=Dansdml)
+                await client.get_channel(int(737624237925466154)).send(embed=Dansdml)
 
-    if message.content == "*실검":
+
+    if message.content == "젤로야 실검":
         url = "https://m.search.naver.com/search.naver?query=%EC%8B%A4%EA%B2%80"
         html = urlopen(url)
         parse = BeautifulSoup(html, "html.parser")
