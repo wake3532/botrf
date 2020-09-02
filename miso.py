@@ -107,7 +107,291 @@ async def on_message(message):
             return
 
             
+    if (message.content.split(" ")[0] == "젤로야 롤"):
+                playerNickname = message.content[5:]
+                """롤전적을 보여줍니다."""
+                checkURLBool = urlopen(opggsummonersearch + quote(playerNickname))
+                bs = BeautifulSoup(checkURLBool, 'html.parser')
 
+                # 자유랭크 언랭은 뒤에 '?image=q_auto&v=1'표현이없다
+                RankMedal = bs.findAll('img', {
+                    'src': re.compile('\/\/[a-z]*\-[A-Za-z]*\.[A-Za-z]*\.[A-Za-z]*\/[A-Za-z]*\/[A-Za-z]*\/[a-z0-9_]*\.png')})
+                # index 0 : Solo Rank
+                # index 1 : Flexible 5v5 rank
+
+                # for mostUsedChampion
+                mostUsedChampion = bs.find('div', {'class': 'ChampionName'})
+                mostUsedChampionKDA = bs.find('span', {'class': 'KDA'})
+
+                # 솔랭, 자랭 둘다 배치가 안되어있는경우 -> 사용된 챔피언 자체가 없다. 즉 모스트 챔피언 메뉴를 넣을 필요가 없다.
+
+                if len(playerNickname) == 1:
+                    embed = discord.Embed(title="소환사 이름이 입력되지 않았습니다!", description="", color=0xff0000)
+                    embed.add_field(name="Summoner name not entered",
+                                    value="To use command !롤전적 : !롤전적 (Summoner Nickname)", inline=False)
+                    await message.channel.send("Error : Incorrect command usage ", embed=embed)
+
+                elif len(deleteTags(bs.findAll('h2', {'class': 'Title'}))) != 0:
+                    embed = discord.Embed(title="존재하지 않는 소환사", description="", color=0xff0000)
+                    embed.add_field(name="해당 닉네임의 소환사가 존재하지 않습니다.", value="소환사 이름을 확인해주세요", inline=False)
+                    await message.channel.send("Error : Non existing Summoner ", embed=embed)
+                else:
+                    try:
+                        # Scrape Summoner's Rank information
+                        # [Solorank,Solorank Tier]
+                        solorank_Types_and_Tier_Info = deleteTags(bs.findAll('div', {'class': {'RankType', 'TierRank'}}))
+                        # [Solorank LeaguePoint, Solorank W, Solorank L, Solorank Winratio]
+                        solorank_Point_and_winratio = deleteTags(
+                            bs.findAll('span', {'class': {'LeaguePoints', 'wins', 'losses', 'winratio'}}))
+                        # [Flex 5:5 Rank,Flexrank Tier,Flextier leaguepoint + W/L,Flextier win ratio]
+                        flexrank_Types_and_Tier_Info = deleteTags(bs.findAll('div', {
+                            'class': {'sub-tier__rank-type', 'sub-tier__rank-tier', 'sub-tier__league-point',
+                                    'sub-tier__gray-text'}}))
+                        # ['Flextier W/L]
+                        flexrank_Point_and_winratio = deleteTags(bs.findAll('span', {'class': {'sub-tier__gray-text'}}))
+
+                        # embed.set_imag()는 하나만 들어갈수 있다.
+
+                        # 솔랭, 자랭 둘다 배치 안되어있는 경우 -> 모스트 챔피언 출력 X
+                        if len(solorank_Point_and_winratio) == 0 and len(flexrank_Point_and_winratio) == 0:
+                            embed = discord.Embed(title="소환사 전적검색", description="", color=0xff00)
+                            embed.add_field(name="Ranked Solo : Unranked", value="Unranked", inline=False)
+                            embed.add_field(name="Flex 5:5 Rank : Unranked", value="Unranked", inline=False)
+                            embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
+                            await message.channel.send("소환사 " + playerNickname + "님의 전적", embed=embed)
+
+                        # 솔로랭크 기록이 없는경우
+                        elif len(solorank_Point_and_winratio) == 0:
+
+                            # most Used Champion Information : Champion Name, KDA, Win Rate
+                            mostUsedChampion = bs.find('div', {'class': 'ChampionName'})
+                            mostUsedChampion = mostUsedChampion.a.text.strip()
+                            mostUsedChampionKDA = bs.find('span', {'class': 'KDA'})
+                            mostUsedChampionKDA = mostUsedChampionKDA.text.split(':')[0]
+                            mostUsedChampionWinRate = bs.find('div', {'class': "Played"})
+                            mostUsedChampionWinRate = mostUsedChampionWinRate.div.text.strip()
+
+                            FlexRankTier = flexrank_Types_and_Tier_Info[0] + ' : ' + flexrank_Types_and_Tier_Info[1]
+                            FlexRankPointAndWinRatio = flexrank_Types_and_Tier_Info[2] + " /" + flexrank_Types_and_Tier_Info[-1]
+                            embed = discord.Embed(title="소환사 전적검색", description="", color=0xff00)
+                            embed.add_field(name="Ranked Solo : Unranked", value="Unranked", inline=False)
+                            embed.add_field(name=FlexRankTier, value=FlexRankPointAndWinRatio, inline=False)
+                            embed.add_field(name="Most Used Champion : " + mostUsedChampion,
+                                            value="KDA : " + mostUsedChampionKDA + " / " + " WinRate : " + mostUsedChampionWinRate,
+                                            inline=False)
+                            embed.set_thumbnail(url='https:' + RankMedal[1]['src'])
+                            await message.channel.send("소환사 " + playerNickname + "님의 전적", embed=embed)
+
+                        # 자유랭크 기록이 없는경우
+                        elif len(flexrank_Point_and_winratio) == 0:
+
+                            # most Used Champion Information : Champion Name, KDA, Win Rate
+                            mostUsedChampion = bs.find('div', {'class': 'ChampionName'})
+                            mostUsedChampion = mostUsedChampion.a.text.strip()
+                            mostUsedChampionKDA = bs.find('span', {'class': 'KDA'})
+                            mostUsedChampionKDA = mostUsedChampionKDA.text.split(':')[0]
+                            mostUsedChampionWinRate = bs.find('div', {'class': "Played"})
+                            mostUsedChampionWinRate = mostUsedChampionWinRate.div.text.strip()
+
+                            SoloRankTier = solorank_Types_and_Tier_Info[0] + ' : ' + solorank_Types_and_Tier_Info[1]
+                            SoloRankPointAndWinRatio = solorank_Point_and_winratio[0] + "/ " + solorank_Point_and_winratio[
+                                1] + " " + solorank_Point_and_winratio[2] + " /" + solorank_Point_and_winratio[3]
+                            embed = discord.Embed(title="소환사 전적검색", description="", color=0xff00)
+                            embed.add_field(name=SoloRankTier, value=SoloRankPointAndWinRatio, inline=False)
+                            embed.add_field(name="Flex 5:5 Rank : Unranked", value="Unranked", inline=False)
+                            embed.add_field(name="Most Used Champion : " + mostUsedChampion,
+                                            value="KDA : " + mostUsedChampionKDA + " / " + "WinRate : " + mostUsedChampionWinRate,
+                                            inline=False)
+                            embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
+                            await message.channel.send("소환사 " + playerNickname + "님의 전적", embed=embed)
+                        # 두가지 유형의 랭크 모두 완료된사람
+                        else:
+                            # 더 높은 티어를 thumbnail에 안착
+                            solorankmedal = RankMedal[0]['src'].split('/')[-1].split('?')[0].split('.')[0].split('_')
+                            flexrankmedal = RankMedal[1]['src'].split('/')[-1].split('?')[0].split('.')[0].split('_')
+
+                             # Make State
+                            SoloRankTier = solorank_Types_and_Tier_Info[0] + ' : ' + solorank_Types_and_Tier_Info[1]
+                            SoloRankPointAndWinRatio = solorank_Point_and_winratio[0] + "/ " + solorank_Point_and_winratio[
+                                1] + " " + solorank_Point_and_winratio[2] + " /" + solorank_Point_and_winratio[3]
+                            FlexRankTier = flexrank_Types_and_Tier_Info[0] + ' : ' + flexrank_Types_and_Tier_Info[1]
+                            FlexRankPointAndWinRatio = flexrank_Types_and_Tier_Info[2] + " /" + flexrank_Types_and_Tier_Info[-1]
+
+                            # most Used Champion Information : Champion Name, KDA, Win Rate
+                            mostUsedChampion = bs.find('div', {'class': 'ChampionName'})
+                            mostUsedChampion = mostUsedChampion.a.text.strip()
+                            mostUsedChampionKDA = bs.find('span', {'class': 'KDA'})
+                            mostUsedChampionKDA = mostUsedChampionKDA.text.split(':')[0]
+                            mostUsedChampionWinRate = bs.find('div', {'class': "Played"})
+                            mostUsedChampionWinRate = mostUsedChampionWinRate.div.text.strip()
+
+                            cmpTier = tierCompare(solorankmedal[0], flexrankmedal[0])
+                            embed = discord.Embed(title="소환사 전적검색", description="", color=0xff00)
+                            embed.add_field(name=SoloRankTier, value=SoloRankPointAndWinRatio, inline=False)
+                            embed.add_field(name=FlexRankTier, value=FlexRankPointAndWinRatio, inline=False)
+                            embed.add_field(name="Most Used Champion : " + mostUsedChampion,
+                                            value="KDA : " + mostUsedChampionKDA + " / " + " WinRate : " + mostUsedChampionWinRate,
+                                            inline=False)
+                            if cmpTier == 0:
+                                embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
+                            elif cmpTier == 1:
+                                embed.set_thumbnail(url='https:' + RankMedal[1]['src'])
+                            else:
+                                if solorankmedal[1] > flexrankmedal[1]:
+                                    embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
+                                elif solorankmedal[1] < flexrankmedal[1]:
+                                    embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
+                                else:
+                                    embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
+                            await message.channel.send("소환사 " + playerNickname + "님의 전적", embed=embed)
+                    except HTTPError as e:
+                        embed = discord.Embed(title="소환사 전적검색 실패", description="", color=discord.Colour.red())
+                        embed.add_field(name="", value="올바르지 않은 소환사 이름입니다. 다시 확인해주세요!", inline=False)
+                        await message.channel.send("Wrong Summoner Nickname")
+
+                    except UnicodeEncodeError as e:
+                        embed = discord.Embed(title="소환사 전적검색 실패", description="", color=discord.Colour.red())
+                        embed.add_field(name="???", value="올바르지 않은 소환사 이름입니다. 다시 확인해주세요!", inline=False)
+                        await message.channel.send("Wrong Summoner Nickname", embed=embed)
+            elif message.content.startswith("제토2 레식전적"):
+                name = message.content[8:]
+                """레식 전적을 보여줍니다"""
+                playerNickname = name
+                html = requests.get(playerSite + playerNickname + '/pc/').text
+                bs = BeautifulSoup(html, 'html.parser')
+
+                # 한번에 검색 안되는 경우에는 해당 반환 리스트의 길이 존재. -> bs.find('div',{'class' : 'results'}
+
+                if bs.find('div', {'class': 'results'}) == None:
+                    # Get latest season's Rank information
+                    latestSeason = bs.find('div', {'class': re.compile('season\-rank operation\_[A-Za-z_]*')})
+
+                    # if player nickname not entered
+                    if len(name) == 1:
+                        embed = discord.Embed(title="플레이어 이름이 입력되지 않았습니다", description="", color=0xff0000)
+                        embed.add_field(name="Error : Player name not entered" + playerNickname,
+                                        value="To use command : 제토2 레식전적 (nickname)")
+                        await message.channel.send("Error : Player name not entered ", embed=embed)
+
+                    # search if it's empty page
+                    elif latestSeason == None:
+                        embed = discord.Embed(title="해당 이름을 가진 플레이어가 존재하지않습니다.", description="", color=0xff0000)
+                        embed.add_field(name="Error : Can't find player name " + playerNickname,
+                                        value="Please check player's nickname")
+                        await message.channel.send("Error : Can't find player name " + playerNickname, embed=embed)
+
+                    # Command entered well
+                    else:
+                        # r6stats profile image
+                        r6Profile = bs.find('div', {'class': 'main-logo'}).img['src']
+
+                        # player level
+                        playerLevel = bs.find('span', {'class': 'quick-info__value'}).text.strip()
+
+                        RankStats = bs.find('div', {'class': 'card stat-card block__ranked horizontal'}).findAll('span', {
+                                        'class': 'stat-count'})
+                        # Get text from <span> values
+                        for info in range(len(RankStats)):
+                            RankStats[info] = RankStats[info].text.strip()
+                        # value of variable RankStats : [Timeplayed, Match Played,kills per matchm, kills,death, KDA Rate,Wins,Losses,W/L Rate]
+
+                        # latest season tier medal
+                        lastestSeasonRankMedalLocation = latestSeason.div.img['src']
+                        # latest Season tier
+                        lastestSeasonRankTier = latestSeason.div.img['alt']
+                        # latest season operation name
+                        OperationName = latestSeason.find('div', {'class': 'meta-wrapper'}).find('div', {
+                            'class': 'operation-title'}).text.strip()
+                        # latest season Ranking
+                        latestSeasonRanking = latestSeason.find('div', {'class': 'rankings-wrapper'}).find('span', {
+                            'class': 'ranking'})
+
+                        # if player not ranked, span has class not ranked if ranked span get class ranking
+                        if latestSeasonRanking == None:
+                            latestSeasonRanking = bs.find('span', {'class': 'not-ranked'}).text.upper()
+                        else:
+                            latestSeasonRanking = latestSeasonRanking.text
+
+                        # Add player's MMR Rank MMR Information
+                        playerInfoMenus = bs.find('a', {'class': 'player-tabs__season_stats'})['href']
+                        mmrMenu = r6URL + playerInfoMenus
+                        html = requests.get(mmrMenu).text
+                        bs = BeautifulSoup(html, 'html.parser')
+
+                        # recent season rank box
+                        # Rank show in purpose : America - Europe - Asia. This code only support Asia server's MMR
+                        getElements = bs.find('div', {
+                            'class': 'card__content'})  # first elements with class 'card__contet is latest season content box
+
+                        for ckAsia in getElements.findAll('div', {'class': 'season-stat--region'}):
+                            checkRegion = ckAsia.find('div', {'class': 'season-stat--region-title'}).text
+                            if checkRegion == "Asia":
+                                getElements = ckAsia
+                                break
+                            else:
+                                pass
+
+                        # Player's Tier Information
+                        latestSeasonTier = getElements.find('img')['alt']
+                        # MMR Datas Info -> [Win,Losses,Abandon,Max,W/L,MMR]
+                        mmrDatas = []
+                        for dt in getElements.findAll('span', {'class': 'season-stat--region-stats__stat'}):
+                            mmrDatas.append(dt.text)
+
+                        embed = discord.Embed(title="r6stats에서 Rainbow Six Siege 플레이어 검색", description="",
+                                                color=0x5CD1E5)
+                        embed.add_field(name="r6stats에서 플레이어 검색", value=playerSite + playerNickname + '/pc/',
+                                        inline=False)
+                        embed.add_field(name="플레이어의 기본 정보",
+                                        value="Ranking : #" + latestSeasonRanking + " | " + "Level : " + playerLevel,
+                                        inline=False)
+                        embed.add_field(name="최신 시즌 정보 | Operation : " + OperationName,
+                                        value=
+                                        "Tier(Asia) : " + latestSeasonTier + " | W/L : " + mmrDatas[0] + "/" + mmrDatas[
+                                        1] + " | " + "MMR(Asia) : " + mmrDatas[-1],
+                                        inline=False)
+
+                        embed.add_field(name="총플레이시간", value=RankStats[0], inline=True)
+                        embed.add_field(name="경기한수", value=RankStats[1], inline=True)
+                        embed.add_field(name="경기당 처치", value=RankStats[2], inline=True)
+                        embed.add_field(name="총킬", value=RankStats[3], inline=True)
+                        embed.add_field(name="총사망", value=RankStats[4], inline=True)
+                        embed.add_field(name="K/D 비율", value=RankStats[5], inline=True)
+                        embed.add_field(name="우승", value=RankStats[6], inline=True)
+                        embed.add_field(name="페베", value=RankStats[7], inline=True)
+                        embed.add_field(name="W/L 비율", value=RankStats[8], inline=True)
+                        embed.set_thumbnail(url=r6URL + r6Profile)
+                        await message.channel.send("Player " + playerNickname + "'s stats search", embed=embed)
+                else:
+                    searchLink = bs.find('a', {'class': 'result'})
+                    if searchLink == None:
+                        embed = discord.Embed(title="해당 이름을 가진 플레이어가 존재하지않습니다.", description="", color=0xff0000)
+                        embed.add_field(name="Error : Can't find player name " + playerNickname,
+                                        value="Please check player's nickname")
+                        await message.channel.send("Error : Can't find player name " + playerNickname, embed=embed)
+                    else:
+                        searchLink = r6URL + searchLink['href']
+                        html = requests.get(searchLink).text
+                        bs = BeautifulSoup(html, 'html.parser')
+                        # Get latest season's Rank information
+                        latestSeason = bs.findAll('div', {'class': re.compile('season\-rank operation\_[A-Za-z_]*')})[0]
+
+                        # if player nickname not entered
+                        if len(name) == 1:
+                            embed = discord.Embed(title="플레이어 이름이 입력되지 않았습니다", description="", color=0xff0000)
+                            embed.add_field(name="Error : Player name not entered" + playerNickname,
+                                            value="To use command : !레식전적 (nickname)")
+                            await message.channel.send("Error : Player name not entered ", embed=embed)
+
+                        # search if it's empty page
+                        elif latestSeason == None:
+                            embed = discord.Embed(title="해당 이름을 가진 플레이어가 존재하지않습니다.", description="", color=0xff0000)
+                            embed.add_field(name="Error : Can't find player name " + playerNickname,
+                                            value="Please check player's nickname")
+                            await message.channel.send("Error : Can't find player name " + playerNickname, embed=embed)
+
+                        # Command entered well
+                        else:
 
 
     if message.content == '젤로야 서버정보':
