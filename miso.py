@@ -35,21 +35,33 @@ async def on_ready():
             await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(name=messages[(m)], type=discord.ActivityType.watching))
             await asyncio.sleep(4)
 
-@client.event
-async def on_member_join(member):
-    try:
-        syscha = member.guild.system_channel
-        await syscha.send(f"{member.mention} 님이 서버에 입장하셨습니다. ")
-    except:
-        pass
 
 @client.event
-async def on_member_remove(member):
+async def on_member_join(member):
+    syschannel = member.guild.system_channel.id 
     try:
-        syscha = member.guild.system_channel
-        await syscha.send(member.name + "님이  ``" + member.guild.name + "`` 서버에서 나가셨습니다 ")
+        embed=discord.Embed(
+            title=f'멤버 입장',
+            description=f'{member}님이{member.guild}에 입장 했습니다.\n현재 서버 인원수: {str(len(member.guild.members))}명',
+            colour=0x00ff00
+        )
+        embed.set_thumbnail(url=member.avatar_url)
+        await client.get_channel(syschannel).send(embed=embed)
     except:
-        pass
+        return None
+@client.event
+async def on_member_remove(member):
+    syschannel = member.guild.system_channel.id 
+    try:
+        embed=discord.Embed(
+            title=f'멤버 퇴장',
+            description=f'{member}님이{member.guild}에 퇴장 했습니다.\n현재 서버 인원수: {str(len(member.guild.members))}명',
+            colour=discord.Colour.red()
+        )
+        embed.set_thumbnail(url=member.avatar_url)
+        await client.get_channel(syschannel).send(embed=embed)
+    except:
+        return None
 
 @client.event
 async def on_message(message):
