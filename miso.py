@@ -249,6 +249,79 @@ async def on_message(message):
                 await m.edit(content="서포트 서버에 피드백이 발송되었어요!", embed=Dansdml)
                 await client.get_channel(int(737624237925466154)).send(embed=Dansdml)
 
+                 elif message.content.startswith(f"젤로야 "):
+                m = await message.channel.send(f"<@{message.author.id}>\n안 내면진다 가위 바위 보")
+                await m.add_reaction('✌')
+                await m.add_reaction('✊')
+                await m.add_reaction('🖐')
+                try:
+                    reaction, user = await client.wait_for('reaction_add', timeout = 20, check = lambda reaction, user: user == message.author and str(reaction.emoji) in ['✌', '✊', '🖐'])
+                except asyncio.TimeoutError:
+                    await message.channel.send(f'<@{message.author.id}>\n안 냈으니까 제토2의 승!')
+                else:
+                    if str(reaction.emoji) == "✌":
+                        a = ['가위','보','바위']
+                        c = random.choice(a)
+                        if c == '가위':
+                            embed = discord.Embed(title=f"비겼습니다",color=0xe4f05a, timestamp=message.created_at)
+                            embed.add_field(name=f"제토2#5434", value=f"가위✌", inline=True)
+                            embed.add_field(name=f"{message.author}", value=f"가위✌", inline=True)
+                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
+                            await message.channel.send(embed=embed)
+                        if c == '보':
+                            embed = discord.Embed(title=f"{message.author} 이겼습니다",color=0xff00, timestamp=message.created_at)
+                            embed.add_field(name=f"제토2#5434", value=f"보🤚", inline=True)
+                            embed.add_field(name=f"{message.author}", value=f"가위✌", inline=True)
+                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
+                            await message.channel.send(embed=embed)
+                        if c == '바위':
+                            embed = discord.Embed(title=f"{message.author} 졌습니다",color=discord.Colour.red(), timestamp=message.created_at)
+                            embed.add_field(name=f"제토2#5434", value=f"바위✊", inline=True)
+                            embed.add_field(name=f"{message.author}", value=f"가위✌", inline=True)
+                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
+                            await message.channel.send(embed=embed)
+                    elif str(reaction.emoji) == "✊":
+                        a = ['가위','보','바위']
+                        c = random.choice(a)
+                        if c == '가위':
+                            embed = discord.Embed(title=f"{message.author} 이겼습니다",color=0xff00, timestamp=message.created_at)
+                            embed.add_field(name=f"제토2#5434", value=f"가위✌", inline=True)
+                            embed.add_field(name=f"{message.author}", value=f"바위✊", inline=True)
+                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
+                            await message.channel.send(embed=embed)
+                        if c == '보':
+                            embed = discord.Embed(title=f"{message.author} 졌습니다",color=discord.Colour.red(), timestamp=message.created_at)
+                            embed.add_field(name=f"제토2#5434", value=f"보🤚", inline=True)
+                            embed.add_field(name=f"{message.author}", value=f"바위✊", inline=True)
+                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
+                            await message.channel.send(embed=embed)
+                        if c == '바위':
+                            embed = discord.Embed(title=f"비겼습니다",color=0xe4f05a, timestamp=message.created_at)
+                            embed.add_field(name=f"제토2#5434", value=f"바위✊", inline=True)
+                            embed.add_field(name=f"{message.author}", value=f"바위✊", inline=True)
+                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
+                            await message.channel.send(embed=embed)
+                    elif str(reaction.emoji) == "🖐":
+                        a = ['가위','보','바위']
+                        c = random.choice(a)
+                        if c == '가위':
+                            embed = discord.Embed(title=f"{message.author} 졌습니다",color=discord.Colour.red(), timestamp=message.created_at)
+                            embed.add_field(name=f"제토2#5434", value=f"가위✌", inline=True)
+                            embed.add_field(name=f"{message.author}", value=f"보🤚", inline=True)
+                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
+                            await message.channel.send(embed=embed)
+                        if c == '보':
+                            embed = discord.Embed(title=f"비겼습니다",color=0xe4f05a, timestamp=message.created_at)
+                            embed.add_field(name=f"제토2#5434", value=f"보🤚", inline=True)
+                            embed.add_field(name=f"{message.author}", value=f"보🤚", inline=True)
+                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
+                            await message.channel.send(embed=embed)
+                        if c == '바위':
+                            embed = discord.Embed(title=f"{message.author} 이겼습니다",color=0xff00, timestamp=message.created_at)
+                            embed.add_field(name=f"제토2#5434", value=f"바위✊", inline=True)
+                            embed.add_field(name=f"{message.author}", value=f"보🤚", inline=True)
+                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
+                            await message.channel.send(embed=embed)
 
     if message.content == "젤로야 실검":
         url = "https://m.search.naver.com/search.naver?query=%EC%8B%A4%EA%B2%80"
