@@ -266,8 +266,8 @@ async def on_message(message):
         embed.add_field(name="서버 Owner ID", value=message.guild.owner.id, inline=False)
         embed.add_field(name="서버 멤버 수", value=f'{len(message.guild.members)}명 (봇 : {len(list(filter(lambda x: x.bot, message.guild.members)))}명 | 유저 : {len(list(filter(lambda x: not x.bot, message.guild.members)))}명)', inline=False)
         embed.add_field(name="서버 채널 수", value=f'전체 채널: {len(message.guild.channels)}개 (채팅채널 : {len(message.guild.text_channels)}개 | 음성채널 : {len(message.guild.voice_channels)}개 | 카테고리 : {len(message.guild.categories)}개)', inline=False)
-        embed.add_field(name="서버 부스트 레벨", value=f'{message.guild.premium_tier}레벨', inline=False)
-        embed.add_field(name="서버 부스트 횟수", value=f'{message.guild.premium_subscription_count}번', inline=False)
+        embed.add_field(name=":serverboost:서버 부스트 레벨", value=f'{message.guild.premium_tier}레벨', inline=False)
+        embed.add_field(name=":serverboost:서버 부스트 횟수", value=f'{message.guild.premium_subscription_count}번', inline=False)
         if message.guild.afk_channel != None:
             embed.add_field(name = f'잠수 채널', value = f'<#{message.guild.afk_channel.id}> \n ( 시간 제한 : {message.guild.afk_timeout} 초 )', inline = False)
         else:
