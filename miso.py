@@ -249,7 +249,7 @@ async def on_message(message):
                 await m.edit(content="서포트 서버에 피드백이 발송되었어요!", embed=Dansdml)
                 await client.get_channel(int(737624237925466154)).send(embed=Dansdml)
 
-                 elif message.content.startswith(f"젤로야 가위바위보"):
+    if message.content.startswith('젤로야 가위바위보'):
                 m = await message.channel.send(f"<@{message.author.id}>\n안 내면진다 가위 바위 보")
                 await m.add_reaction('✌')
                 await m.add_reaction('✊')
