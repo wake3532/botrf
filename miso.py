@@ -30,7 +30,7 @@ async def on_ready():
     while True:
         user = len(client.users)
         server = len(client.guilds)
-        messages = ["제 접두사는 * 입니다!", "∑」FOR#1234님이 제작했어요!" , "TEAM MB" , str(user) + "분이 제 봇을 이용중입니다.", str(server) + "개의 서버에 있습니다."]
+        messages = ["🌴 코로나 의심시 1339 ", "🎄 : cheerybot.com " , " 🌸 : 안녕하세요 " , str(user) + "분이 제 봇을 이용중입니다. 항상 고마워요! ", str(server) + "개의 서버에 있습니다. 저를 초대해 더 늘려주세요 ! ❤ "]
         for (m) in range(5):
             await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(name=messages[(m)], type=discord.ActivityType.watching))
             await asyncio.sleep(4)
@@ -42,7 +42,7 @@ async def on_member_join(member):
     try:
         embed=discord.Embed(
             title=f'멤버 입장',
-            description=f'{member}님이{member.guild}에 입장 했습니다.\n현재 서버 인원수: {str(len(member.guild.members))}명',
+            description=f'{member}님이{member.guild}서버에 입장 했습니다. 환영해요  [<:link:788705500060450838>봇초대](https://discord.com/api/oauth2/authorize?client_id=795856795297513482&permissions=8&scope=bot)\n현재 서버 인원수: {str(len(member.guild.members))}명',
             colour=0x00ff00
         )
         embed.set_thumbnail(url=member.avatar_url)
@@ -55,7 +55,7 @@ async def on_member_remove(member):
     try:
         embed=discord.Embed(
             title=f'멤버 퇴장',
-            description=f'{member}님이{member.guild}에 퇴장 했습니다.\n현재 서버 인원수: {str(len(member.guild.members))}명',
+            description=f'{member}님이{member.guild}에 퇴장 했습니다. 잘가세요 ![<:link:788705500060450838>봇초대](https://discord.com/api/oauth2/authorize?client_id=795856795297513482&permissions=8&scope=bot)  \n현재 서버 인원수: {str(len(member.guild.members))}명',
             colour=discord.Colour.red()
         )
         embed.set_thumbnail(url=member.avatar_url)
@@ -65,19 +65,20 @@ async def on_member_remove(member):
 
 @client.event
 async def on_message(message):
-    if message.content.startswith("젤로야 핑"):
+    if message.content.startswith("c/ping"):
         la = client.latency
-        embed = discord.Embed(title="퐁!")
+        embed = discord.Embed(title="<a:fwq:792379073292795944>  현재 핑 상태입니다.  [ 0.1초마다 핑 속도 업데이트중  ] ")
         embed.add_field(name="반응 속도", value=str(round(la * 1000)) + "ms")
-        embed.set_footer(text=message.author.name + " | 와 좋고 좋았어요 ! ", icon_url=message.author.avatar_url)
+        embed.set_footer(text=message.author.name + " 호스팅 부분에서 핑 속도에 문제가 있을 수 있어요.  ", icon_url=message.author.avatar_url)
         await message.channel.send(embed=embed)
 
-    if message.content.startswith('젤로야 정보'):
+        
+    if message.content.startswith('c/info'):
         print(f'{message.guild.name}/{message.author} ('+ f'{message.author.id}) : {message.content}')
         user = message.guild.get_member(int(message.content.split(' ')[1][3:21]))
         roles=[role for role in user.roles]
         embed=discord.Embed(colour=user.color, timestamp=message.created_at)
-        embed.set_author(name=f"{user}님의 정보!")
+        embed.set_author(name=f"{user}님의 정보입니다 [<:warning:788704019852820491>  {user}님이 정보 가져오기를 별로 싫어하면 하지 말아주세요 ]  ")
         embed.set_thumbnail(url=user.avatar_url)
         embed.set_footer(text=f"{message.author}님에 정보를 가져온겁니다.", icon_url=message.author.avatar_url)
         embed.add_field(name="ID", value=user.id, inline = False)
@@ -89,14 +90,19 @@ async def on_message(message):
         embed.add_field(name ="상태", value =user.status, inline = False)
         await message.channel.send(embed=embed)
 
-    if (message.content.split(" ")[0] == "젤로야 밴"):
+    if (message.content.split(" ")[0] == "c!ban"):
+                embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at)
+                embed.add_field(name="<a:fwq:792379073292795944>  곧 밴 됍니다 기다리세요  ", value="  최대한 빨리 처리해드릴게요 ", inline=True)
+                embed.set_footer(text=f"{message.author}, 인증안됌", icon_url=message.author.avatar_url)
+                await message.channel.send(embed=embed)
+                time.sleep(8)
         if (message.author.guild_permissions.ban_members):
             try:
                 user = message.guild.get_member(int(message.content.split(' ')[1][3:21]))
                 reason = message.content[22:]
                 if (len(message.content.split(" ")) == 2):
                     reason = "None"
-                await user.send(embed=discord.Embed(title="💥 서버 추방", description=f'당신은 **{message.guild.name}** 서버에서 차단되었습니다. 사유는 다음과 같습니다. ```{reason}```', color=0xff0000))
+                await user.send(embed=discord.Embed(title="밴 돼셨습니다", description=f' <:warning:788704019852820491> 당신은 **{message.guild.name}** 서버에서 차단되었습니다. 사유는 다음과 같습니다. ```{reason}```', color=0xff0000))
                 await user.ban(reason=reason)
                 await message.channel.send(embed=discord.Embed(title="Ban Success", description=f"{message.author.mention} 님, 성공적으로 차단시켰습니다. 사유:```{reason}```", color=0x00ff00))
             except Exception as e:
@@ -106,376 +112,7 @@ async def on_message(message):
             await message.channel.send(embed=discord.Embed(title="⚠ 권한 부족", description=message.author.mention + "님은 유저를 차단할 수 있는 권한이 없습니다.", color=0xff0000))
             return
 
-            
-    if (message.content.split(" ")[0] == "젤로야 롤"):
-                playerNickname = message.content[5:]
-                """롤전적을 보여줍니다."""
-                checkURLBool = urlopen(opggsummonersearch + quote(playerNickname))
-                bs = BeautifulSoup(checkURLBool, 'html.parser')
-
-                # 자유랭크 언랭은 뒤에 '?image=q_auto&v=1'표현이없다
-                RankMedal = bs.findAll('img', {
-                    'src': re.compile('\/\/[a-z]*\-[A-Za-z]*\.[A-Za-z]*\.[A-Za-z]*\/[A-Za-z]*\/[A-Za-z]*\/[a-z0-9_]*\.png')})
-                # index 0 : Solo Rank
-                # index 1 : Flexible 5v5 rank
-
-                # for mostUsedChampion
-                mostUsedChampion = bs.find('div', {'class': 'ChampionName'})
-                mostUsedChampionKDA = bs.find('span', {'class': 'KDA'})
-
-                # 솔랭, 자랭 둘다 배치가 안되어있는경우 -> 사용된 챔피언 자체가 없다. 즉 모스트 챔피언 메뉴를 넣을 필요가 없다.
-
-                if len(playerNickname) == 1:
-                    embed = discord.Embed(title="소환사 이름이 입력되지 않았습니다!", description="", color=0xff0000)
-                    embed.add_field(name="Summoner name not entered",
-                                    value="To use command !롤전적 : !롤전적 (Summoner Nickname)", inline=False)
-                    await message.channel.send("Error : Incorrect command usage ", embed=embed)
-
-                elif len(deleteTags(bs.findAll('h2', {'class': 'Title'}))) != 0:
-                    embed = discord.Embed(title="존재하지 않는 소환사", description="", color=0xff0000)
-                    embed.add_field(name="해당 닉네임의 소환사가 존재하지 않습니다.", value="소환사 이름을 확인해주세요", inline=False)
-                    await message.channel.send("Error : Non existing Summoner ", embed=embed)
-                else:
-                    try:
-                        # Scrape Summoner's Rank information
-                        # [Solorank,Solorank Tier]
-                        solorank_Types_and_Tier_Info = deleteTags(bs.findAll('div', {'class': {'RankType', 'TierRank'}}))
-                        # [Solorank LeaguePoint, Solorank W, Solorank L, Solorank Winratio]
-                        solorank_Point_and_winratio = deleteTags(
-                            bs.findAll('span', {'class': {'LeaguePoints', 'wins', 'losses', 'winratio'}}))
-                        # [Flex 5:5 Rank,Flexrank Tier,Flextier leaguepoint + W/L,Flextier win ratio]
-                        flexrank_Types_and_Tier_Info = deleteTags(bs.findAll('div', {
-                            'class': {'sub-tier__rank-type', 'sub-tier__rank-tier', 'sub-tier__league-point',
-                                    'sub-tier__gray-text'}}))
-                        # ['Flextier W/L]
-                        flexrank_Point_and_winratio = deleteTags(bs.findAll('span', {'class': {'sub-tier__gray-text'}}))
-
-                        # embed.set_imag()는 하나만 들어갈수 있다.
-
-                        # 솔랭, 자랭 둘다 배치 안되어있는 경우 -> 모스트 챔피언 출력 X
-                        if len(solorank_Point_and_winratio) == 0 and len(flexrank_Point_and_winratio) == 0:
-                            embed = discord.Embed(title="소환사 전적검색", description="", color=0xff00)
-                            embed.add_field(name="Ranked Solo : Unranked", value="Unranked", inline=False)
-                            embed.add_field(name="Flex 5:5 Rank : Unranked", value="Unranked", inline=False)
-                            embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
-                            await message.channel.send("소환사 " + playerNickname + "님의 전적", embed=embed)
-
-                        # 솔로랭크 기록이 없는경우
-                        elif len(solorank_Point_and_winratio) == 0:
-
-                            # most Used Champion Information : Champion Name, KDA, Win Rate
-                            mostUsedChampion = bs.find('div', {'class': 'ChampionName'})
-                            mostUsedChampion = mostUsedChampion.a.text.strip()
-                            mostUsedChampionKDA = bs.find('span', {'class': 'KDA'})
-                            mostUsedChampionKDA = mostUsedChampionKDA.text.split(':')[0]
-                            mostUsedChampionWinRate = bs.find('div', {'class': "Played"})
-                            mostUsedChampionWinRate = mostUsedChampionWinRate.div.text.strip()
-
-                            FlexRankTier = flexrank_Types_and_Tier_Info[0] + ' : ' + flexrank_Types_and_Tier_Info[1]
-                            FlexRankPointAndWinRatio = flexrank_Types_and_Tier_Info[2] + " /" + flexrank_Types_and_Tier_Info[-1]
-                            embed = discord.Embed(title="소환사 전적검색", description="", color=0xff00)
-                            embed.add_field(name="Ranked Solo : Unranked", value="Unranked", inline=False)
-                            embed.add_field(name=FlexRankTier, value=FlexRankPointAndWinRatio, inline=False)
-                            embed.add_field(name="Most Used Champion : " + mostUsedChampion,
-                                            value="KDA : " + mostUsedChampionKDA + " / " + " WinRate : " + mostUsedChampionWinRate,
-                                            inline=False)
-                            embed.set_thumbnail(url='https:' + RankMedal[1]['src'])
-                            await message.channel.send("소환사 " + playerNickname + "님의 전적", embed=embed)
-
-                        # 자유랭크 기록이 없는경우
-                        elif len(flexrank_Point_and_winratio) == 0:
-
-                            # most Used Champion Information : Champion Name, KDA, Win Rate
-                            mostUsedChampion = bs.find('div', {'class': 'ChampionName'})
-                            mostUsedChampion = mostUsedChampion.a.text.strip()
-                            mostUsedChampionKDA = bs.find('span', {'class': 'KDA'})
-                            mostUsedChampionKDA = mostUsedChampionKDA.text.split(':')[0]
-                            mostUsedChampionWinRate = bs.find('div', {'class': "Played"})
-                            mostUsedChampionWinRate = mostUsedChampionWinRate.div.text.strip()
-
-                            SoloRankTier = solorank_Types_and_Tier_Info[0] + ' : ' + solorank_Types_and_Tier_Info[1]
-                            SoloRankPointAndWinRatio = solorank_Point_and_winratio[0] + "/ " + solorank_Point_and_winratio[
-                                1] + " " + solorank_Point_and_winratio[2] + " /" + solorank_Point_and_winratio[3]
-                            embed = discord.Embed(title="소환사 전적검색", description="", color=0xff00)
-                            embed.add_field(name=SoloRankTier, value=SoloRankPointAndWinRatio, inline=False)
-                            embed.add_field(name="Flex 5:5 Rank : Unranked", value="Unranked", inline=False)
-                            embed.add_field(name="Most Used Champion : " + mostUsedChampion,
-                                            value="KDA : " + mostUsedChampionKDA + " / " + "WinRate : " + mostUsedChampionWinRate,
-                                            inline=False)
-                            embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
-                            await message.channel.send("소환사 " + playerNickname + "님의 전적", embed=embed)
-                        # 두가지 유형의 랭크 모두 완료된사람
-                        else:
-                            # 더 높은 티어를 thumbnail에 안착
-                            solorankmedal = RankMedal[0]['src'].split('/')[-1].split('?')[0].split('.')[0].split('_')
-                            flexrankmedal = RankMedal[1]['src'].split('/')[-1].split('?')[0].split('.')[0].split('_')
-
-                             # Make State
-                            SoloRankTier = solorank_Types_and_Tier_Info[0] + ' : ' + solorank_Types_and_Tier_Info[1]
-                            SoloRankPointAndWinRatio = solorank_Point_and_winratio[0] + "/ " + solorank_Point_and_winratio[
-                                1] + " " + solorank_Point_and_winratio[2] + " /" + solorank_Point_and_winratio[3]
-                            FlexRankTier = flexrank_Types_and_Tier_Info[0] + ' : ' + flexrank_Types_and_Tier_Info[1]
-                            FlexRankPointAndWinRatio = flexrank_Types_and_Tier_Info[2] + " /" + flexrank_Types_and_Tier_Info[-1]
-
-                            # most Used Champion Information : Champion Name, KDA, Win Rate
-                            mostUsedChampion = bs.find('div', {'class': 'ChampionName'})
-                            mostUsedChampion = mostUsedChampion.a.text.strip()
-                            mostUsedChampionKDA = bs.find('span', {'class': 'KDA'})
-                            mostUsedChampionKDA = mostUsedChampionKDA.text.split(':')[0]
-                            mostUsedChampionWinRate = bs.find('div', {'class': "Played"})
-                            mostUsedChampionWinRate = mostUsedChampionWinRate.div.text.strip()
-
-                            cmpTier = tierCompare(solorankmedal[0], flexrankmedal[0])
-                            embed = discord.Embed(title="소환사 전적검색", description="", color=0xff00)
-                            embed.add_field(name=SoloRankTier, value=SoloRankPointAndWinRatio, inline=False)
-                            embed.add_field(name=FlexRankTier, value=FlexRankPointAndWinRatio, inline=False)
-                            embed.add_field(name="Most Used Champion : " + mostUsedChampion,
-                                            value="KDA : " + mostUsedChampionKDA + " / " + " WinRate : " + mostUsedChampionWinRate,
-                                            inline=False)
-                            if cmpTier == 0:
-                                embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
-                            elif cmpTier == 1:
-                                embed.set_thumbnail(url='https:' + RankMedal[1]['src'])
-                            else:
-                                if solorankmedal[1] > flexrankmedal[1]:
-                                    embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
-                                elif solorankmedal[1] < flexrankmedal[1]:
-                                    embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
-                                else:
-                                    embed.set_thumbnail(url='https:' + RankMedal[0]['src'])
-                            await message.channel.send("소환사 " + playerNickname + "님의 전적", embed=embed)
-                    except HTTPError as e:
-                        embed = discord.Embed(title="소환사 전적검색 실패", description="", color=discord.Colour.red())
-                        embed.add_field(name="", value="올바르지 않은 소환사 이름입니다. 다시 확인해주세요!", inline=False)
-                        await message.channel.send("Wrong Summoner Nickname")
-
-                    except UnicodeEncodeError as e:
-                        embed = discord.Embed(title="소환사 전적검색 실패", description="", color=discord.Colour.red())
-                        embed.add_field(name="???", value="올바르지 않은 소환사 이름입니다. 다시 확인해주세요!", inline=False)
-                        await message.channel.send("Wrong Summoner Nickname", embed=embed)
-
-    if message.content == '젤로야 서버정보':
-        rnrrk = message.guild.region
-        print(message.guild.region)
-        embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at, title=f"{message.guild.name}")
-        embed.set_thumbnail(url=message.guild.icon_url)
-        embed.add_field(name="서버 이름", value=message.guild.name, inline=False)
-        embed.add_field(name="서버 ID", value=message.guild.id, inline=False)
-        embed.add_field(name="서버 국가", value=rnrrk, inline=False)
-        embed.add_field(name="서버 Owner", value=f'<@{message.guild.owner.id}>', inline=False)
-        embed.add_field(name="서버 Owner ID", value=message.guild.owner.id, inline=False)
-        embed.add_field(name="서버 멤버 수", value=f'{len(message.guild.members)}명 (봇 : {len(list(filter(lambda x: x.bot, message.guild.members)))}명 | 유저 : {len(list(filter(lambda x: not x.bot, message.guild.members)))}명)', inline=False)
-        embed.add_field(name="서버 채널 수", value=f'전체 채널: {len(message.guild.channels)}개 (채팅채널 : {len(message.guild.text_channels)}개 | 음성채널 : {len(message.guild.voice_channels)}개 | 카테고리 : {len(message.guild.categories)}개)', inline=False)
-        embed.add_field(name=":serverboost:서버 부스트 레벨", value=f'{message.guild.premium_tier}레벨', inline=False)
-        embed.add_field(name=":serverboost:서버 부스트 횟수", value=f'{message.guild.premium_subscription_count}번', inline=False)
-        if message.guild.afk_channel != None:
-            embed.add_field(name = f'잠수 채널', value = f'<#{message.guild.afk_channel.id}> \n ( 시간 제한 : {message.guild.afk_timeout} 초 )', inline = False)
-        else:
-            embed.add_field(name="잠수 채널", value="잠수 채널이 없습니다.")
-        if message.guild.system_channel != None:
-            embed.add_field(name = f'시스템 채널', value = f'<#{message.guild.system_channel.id}>', inline = False)
-        else:
-            embed.add_field(name="잠수 채널", value="시스템 채널이 없습니다.")
-        embed.set_footer(text=f"{message.author}, 인증됨 | 준홍봇의 코드를 참고했어요!", icon_url=message.author.avatar_url)
-        await message.channel.send(embed=embed)
-
-    if message.content.startswith("젤로야 계산"):
-        global calcResult
-        param = message.content.split()
-        try:
-            if param[1].startswith("더하기"):
-                calcResult = int(param[2])+int(param[3])
-                if calcResult < 1000000000:
-                    embed = discord.Embed(title="SkyBOT : 계산 더하기 결과 ", description="계산 결과는 [ "+str(calcResult)+" ] 인것 같아요!")
-                    await message.channel.send(embed=embed)
-                elif calcResult >= 1000000000:
-                    embed = discord.Embed(title="SkyBOT : 계산 더하기 결과 ", description="계산 결과가 [ 1, 000, 000, 000 ] 을 넘었어요!", timestamp=message.created_at,
-                    colour = discord.Colour.red()
-            )
-                    await message.channel.send(embed=embed)
-            if param[1].startswith("빼기"):
-                calcResult = int(param[2])-int(param[3])
-                if calcResult < 100000000:
-                    embed = discord.Embed(title="SkyBOT : 계산 빼기 결과 ", description="계산 결과는 [ "+str(calcResult)+" ] 인것 같아요!")
-                    await message.channel.send(embed=embed)
-                elif calcResult >= 100000000:
-                    embed = discord.Embed(title="SkyBOT : 계산 빼기 결과 ", description="계산 결과가 [ 100, 000, 000 ] 을 넘었어요!", timestamp=message.created_at,
-                    colour = discord.Colour.red()
-            )
-                    await message.channel.send(embed=embed)
-            if param[1].startswith("곱하기"):
-                calcResult = int(param[2])*int(param[3])
-                if calcResult < 10000000000:
-                    embed = discord.Embed(title="SkyBOT : 계산 곱하기 결과 ", description="계산 결과는 [ "+str(calcResult)+" ] 인것 같아요!")
-                    await message.channel.send(embed=embed)
-                elif calcResult >= 10000000000:
-                    embed = discord.Embed(title="SkyBOT : 계산 곱하기 결과 ", description="계산 결과가 [ 10, 000, 000, 000 ] 을 넘었어요!", timestamp=message.created_at,
-                    colour = discord.Colour.red()
-            )
-                    await message.channel.send(embed=embed)
-            if param[1].startswith("나누기"):
-                calcResult = int(param[2])/int(param[3])
-                if calcResult < 100000000:
-                    embed = discord.Embed(title="SkyBOT : 계산 나누기 결과 ", description="계산 결과는 [ "+str(calcResult)+" ] 인것 같아요!")
-                    await message.channel.send(embed=embed)
-                elif calcResult >= 100000000:
-                    embed = discord.Embed(title="SkyBOT : 계산 나누기 결과 ", description="계산 결과가 [ 100, 000, 000 ] 을 넘었어요!", timestamp=message.created_at,
-                    colour = discord.Colour.red()
-            )
-                    await message.channel.send(embed=embed)
-        except IndexError:
-            embed = discord.Embed(title="SkyBOT : 계산 오류", description="2개의 숫자가 포함되지 않았어요!", timestamp=message.created_at,
-            colour = discord.Colour.dark_red()        
-        )
-            await message.channel.send(embed=embed)
-        except ValueError:
-            await message.channel.send("숫자로 넣어주세요.")
-        except ZeroDivisionError:
-            await message.channel.send("You can't divide with 0.")
-
-
-    if message.content == '젤로야 명령어':
-                embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at)
-                embed.add_field(name="보내는중..", value=":yes: 잠시 기다려 주세요", inline=True)
-                embed.set_footer(text=f"{message.author}, 인증됨", icon_url=message.author.avatar_url)
-                await message.channel.send(embed=embed)
-                time.sleep(3)
-                await message.delete()
-                embed=discord.Embed(colour=0x85CFFF, timestamp=message.created_at)
-                embed.add_field(name=":wave: 안녕하세요! 아 참고로 그거 아시죠? 접두사는 젤로야 입니다 ! ", value="도움말 시작!", inline=True)
-                embed.add_field(name="도움말 1", value="킥 밴 청소 실검 계산 서버정보 정보 핑", inline=True)
-                embed.add_field(name="도움말 2", value="준비중이에요!", inline=True)
-                await message.channel.send(embed=embed)
-
-
-    if (message.content.split(" ")[0] == "젤로야 킥"):
-        if (message.author.guild_permissions.kick_members):
-            try:
-                user = message.guild.get_member(int(message.content.split(' ')[1][2:20]))
-                reason = message.content[22:]
-                if (len(message.content.split(" ")) == 2):
-                    reason = "None"
-                await user.send(embed=discord.Embed(title="💥 서버 추방", description=f'당신은 **{message.guild.name}** 서버에서 추방되었습니다. 사유는 다음과 같습니다. ```{reason}```', color=0xff0000))
-                await user.kick(reason=reason)
-                await message.channel.send(embed=discord.Embed(title="Kick Success", description=f"{message.author.mention} 님, 성공적으로 추방시켰습니다. 사유:```{reason}```", color=0x00ff00))
-            except Exception as e:
-                await message.channel.send(embed=discord.Embed(title="❌ 에러 발생", description=str(e), color=0xff0000))
-                return
-        else:
-            await message.channel.send(embed=discord.Embed(title="⚠ 권한 부족", description=message.author.mention + "님은 유저를 추방할 수 있는 권한이 없습니다.", color=0xff0000))
-            return 
-        
-    if message.content.startswith("젤로야 피드백"):
-        Dansdml1 = message.content[5:]
-        Dansdml = discord.Embed(title="**< Space BOT >**", color=0x6777ff)
-        Dansdml.add_field(name="• 문의하는 내용", value=f"{Dansdml1}\n\n• 문의하는 서버 : {message.guild.name}\n• 문의한 이용자 : {message.author.mention}", inline=False)
-        Dansdml.set_thumbnail(url="https://cdn.discordapp.com/attachments/736382917072257107/736383011125461072/skybot.png")
-        Dansdml.set_footer(text=message.author.name + " | 피드백 코드의 원본은 djs226587#1243 님의 코드에요 !", icon_url=message.author.avatar_url)
-        m = await message.channel.send("문의발송 여부를 선택하여주세요.", embed=Dansdml)
-        await m.add_reaction('✅')
-        await m.add_reaction('❎')
-        try:
-            reaction, user = await client.wait_for('reaction_add', timeout = 5, check = lambda reaction, user: user == message.author and str(reaction.emoji) in ['✅', '❎'])
-        except asyncio.TimeoutError:
-            Drhdwltlrks = discord.Embed(title="**< Space BOT >**", color=0xff0000)
-            Drhdwltlrks.add_field(name="**문의**", value=f"{message.author.mention} **님 문의발송 선택 시간초과입니다.**", inline=False)
-            Drhdwltlrks.set_thumbnail(url=message.author.avatar_url)
-            Drhdwltlrks.set_footer(text="Sky BOT#2204 | 피드백 코드의 원본은 djs226587#1243 님의 코드에요 !" , icon_url="https://cdn.discordapp.com/attachments/736382917072257107/736383011125461072/skybot.png")
-            await m.edit(content="문의발송이 취소되었습니다.", embed=Drhdwltlrks)
-        else:
-            if str(reaction.emoji) == "❎":
-                Drhdwlcnlth = discord.Embed(title="**< Space BOT >**", color=0xff0000)
-                Drhdwlcnlth.add_field(name="**문의**", value=f"{message.author.mention} **님 문의발송이 취소되었습니다.**", inline=False)
-                Drhdwlcnlth.set_thumbnail(url=message.author.avatar_url)
-                Drhdwlcnlth.set_footer(text="Sky BOT#2204 | 피드백 코드의 원본은 djs226587#1243 님의 코드에요 !" , icon_url="https://cdn.discordapp.com/attachments/736382917072257107/736383011125461072/skybot.png")
-                await m.edit(embed=Drhdwlcnlth)
-            elif str(reaction.emoji) == "✅":
-                await m.edit(content="서포트 서버에 피드백이 발송되었어요!", embed=Dansdml)
-                await client.get_channel(int(737624237925466154)).send(embed=Dansdml)
-
-    if message.content.startswith('젤로야 가위바위보'):
-                m = await message.channel.send(f"<@{message.author.id}>\n님 안내면 지는겁니다! 가위바위보!")
-                await m.add_reaction('✌')
-                await m.add_reaction('✊')
-                await m.add_reaction('🖐')
-                try:
-                    reaction, user = await client.wait_for('reaction_add', timeout = 20, check = lambda reaction, user: user == message.author and str(reaction.emoji) in ['✌', '✊', '🖐'])
-                except asyncio.TimeoutError:
-                    await message.channel.send(f'<@{message.author.id}>\n뭐야 쉽네 결정 장애 있으신가요?')
-                else:
-                    if str(reaction.emoji) == "✌":
-                        a = ['가위','보','바위']
-                        c = random.choice(a)
-                        if c == '가위':
-                            embed = discord.Embed(title=f"비겼습니다",color=0xe4f05a, timestamp=message.created_at)
-                            embed.add_field(name=f"제작자 FOR#1234", value=f"가위✌", inline=True)
-                            embed.add_field(name=f"{message.author}", value=f"가위✌", inline=True)
-                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
-                            await message.channel.send(embed=embed)
-                        if c == '보':
-                            embed = discord.Embed(title=f"{message.author} 이겼습니다",color=0xff00, timestamp=message.created_at)
-                            embed.add_field(name=f"제작자 FOR#1234", value=f"보🤚", inline=True)
-                            embed.add_field(name=f"{message.author}", value=f"가위✌", inline=True)
-                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
-                            await message.channel.send(embed=embed)
-                        if c == '바위':
-                            embed = discord.Embed(title=f"{message.author} 졌습니다",color=discord.Colour.red(), timestamp=message.created_at)
-                            embed.add_field(name=f"제작자 FOR#1234", value=f"바위✊", inline=True)
-                            embed.add_field(name=f"{message.author}", value=f"가위✌", inline=True)
-                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
-                            await message.channel.send(embed=embed)
-                    elif str(reaction.emoji) == "✊":
-                        a = ['가위','보','바위']
-                        c = random.choice(a)
-                        if c == '가위':
-                            embed = discord.Embed(title=f"{message.author} 이겼습니다",color=0xff00, timestamp=message.created_at)
-                            embed.add_field(name=f"제토2#5434", value=f"가위✌", inline=True)
-                            embed.add_field(name=f"{message.author}", value=f"바위✊", inline=True)
-                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
-                            await message.channel.send(embed=embed)
-                        if c == '보':
-                            embed = discord.Embed(title=f"{message.author} 졌습니다",color=discord.Colour.red(), timestamp=message.created_at)
-                            embed.add_field(name=f"제토2#5434", value=f"보🤚", inline=True)
-                            embed.add_field(name=f"{message.author}", value=f"바위✊", inline=True)
-                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
-                            await message.channel.send(embed=embed)
-                        if c == '바위':
-                            embed = discord.Embed(title=f"비겼습니다",color=0xe4f05a, timestamp=message.created_at)
-                            embed.add_field(name=f"제토2#5434", value=f"바위✊", inline=True)
-                            embed.add_field(name=f"{message.author}", value=f"바위✊", inline=True)
-                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
-                            await message.channel.send(embed=embed)
-                    elif str(reaction.emoji) == "🖐":
-                        a = ['가위','보','바위']
-                        c = random.choice(a)
-                        if c == '가위':
-                            embed = discord.Embed(title=f"{message.author} 졌습니다",color=discord.Colour.red(), timestamp=message.created_at)
-                            embed.add_field(name=f"제토2#5434", value=f"가위✌", inline=True)
-                            embed.add_field(name=f"{message.author}", value=f"보🤚", inline=True)
-                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
-                            await message.channel.send(embed=embed)
-                        if c == '보':
-                            embed = discord.Embed(title=f"비겼습니다",color=0xe4f05a, timestamp=message.created_at)
-                            embed.add_field(name=f"제토2#5434", value=f"보🤚", inline=True)
-                            embed.add_field(name=f"{message.author}", value=f"보🤚", inline=True)
-                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
-                            await message.channel.send(embed=embed)
-                        if c == '바위':
-                            embed = discord.Embed(title=f"{message.author} 이겼습니다",color=0xff00, timestamp=message.created_at)
-                            embed.add_field(name=f"제토2#5434", value=f"바위✊", inline=True)
-                            embed.add_field(name=f"{message.author}", value=f"보🤚", inline=True)
-                            embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
-                            await message.channel.send(embed=embed)
-
-    if message.content == "젤로야 실검":
-        url = "https://m.search.naver.com/search.naver?query=%EC%8B%A4%EA%B2%80"
-        html = urlopen(url)
-        parse = BeautifulSoup(html, "html.parser")
-        result = ""
-        tags = parse.find_all("span", {"class" : "tit _keyword"})
-        for i, e in enumerate(tags):
-            result = result + (str(i+1))+"위 | "+e.text+"\n"
-        await message.channel.send(result)
+ 
         
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
